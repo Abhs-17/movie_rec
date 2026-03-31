@@ -112,7 +112,30 @@ INSERT IGNORE INTO DIRECTOR (name, nationality) VALUES
 ('Martin Scorsese',    'American'),
 ('David Fincher',      'American'),
 ('Denis Villeneuve',   'Canadian'),
-('Quentin Tarantino',  'American');
+('Quentin Tarantino',  'American'),
+('Nitesh Tiwari',      'Indian'),
+('S. S. Rajamouli',    'Indian'),
+('Lokesh Kanagaraj',   'Indian'),
+('Jeethu Joseph',      'Indian'),
+('Prashanth Neel',     'Indian'),
+('Francis Ford Coppola','American'),
+('Frank Darabont',     'American'),
+('Lana Wachowski',     'American'),
+('Ridley Scott',       'British'),
+('Bong Joon-ho',       'South Korean'),
+('Damien Chazelle',    'American'),
+('George Miller',      'Australian'),
+('Peter Jackson',      'New Zealander'),
+('Robert Zemeckis',    'American'),
+('Todd Phillips',      'American'),
+('Jonathan Demme',     'American'),
+('Hayao Miyazaki',     'Japanese'),
+('Lee Unkrich',        'American'),
+('Makoto Shinkai',     'Japanese'),
+('Wes Anderson',       'American'),
+('Joseph Kosinski',    'American'),
+('Matt Reeves',        'American'),
+('Joel Coen',          'American');
 
 -- Genres
 INSERT IGNORE INTO GENRE (genre_name) VALUES
@@ -157,7 +180,37 @@ INSERT IGNORE INTO MOVIE (title, release_year, rating, poster_url, trailer_url, 
 ('Inglourious Basterds',2009,8.3, 'https://image.tmdb.org/t/p/w500/7sfbEnaARXDDhKm0CZ7D7uc2sbo.jpg', 'https://www.youtube.com/watch?v=KnrRy6kSFF0', 8),
 ('Catch Me If You Can',2002, 8.1, 'https://img.youtube.com/vi/71rDQ7z4eFg/hqdefault.jpg', 'https://www.youtube.com/watch?v=71rDQ7z4eFg', 2),
 ('The Martian',        2015, 8.0, 'https://img.youtube.com/vi/ej3ioOneTy8/hqdefault.jpg', 'https://www.youtube.com/watch?v=ej3ioOneTy8', 7),
-('The Wolf of Wall Street', 2013, 8.2, 'https://image.tmdb.org/t/p/w500/sOxr33wnRuKazR9ClHek73T8qnK.jpg', 'https://www.youtube.com/watch?v=iszwuX1AK6A', 5);
+('The Wolf of Wall Street', 2013, 8.2, 'https://image.tmdb.org/t/p/w500/sOxr33wnRuKazR9ClHek73T8qnK.jpg', 'https://www.youtube.com/watch?v=iszwuX1AK6A', 5),
+('Dangal',             2016, 8.3, 'https://dummyimage.com/500x750/111/eee.jpg&text=Dangal+(2016)', 'https://www.youtube.com/watch?v=x_7YlGv9u1g', 9),
+('RRR',                2022, 7.8, 'https://dummyimage.com/500x750/111/eee.jpg&text=RRR+(2022)', 'https://www.youtube.com/watch?v=NgBoMJy386M', 10),
+('Vikram',             2022, 8.3, 'https://dummyimage.com/500x750/111/eee.jpg&text=Vikram+(2022)', 'https://www.youtube.com/watch?v=OKBMCL-frPU', 11),
+('Drishyam',           2013, 8.2, 'https://dummyimage.com/500x750/111/eee.jpg&text=Drishyam+(2013)', 'https://www.youtube.com/watch?v=AuuX2j14NBg', 12),
+('KGF: Chapter 1',     2018, 8.2, 'https://dummyimage.com/500x750/111/eee.jpg&text=KGF+Chapter+1+(2018)', 'https://www.youtube.com/watch?v=cn8mueJ9wKk', 13),
+('The Godfather',      1972, 9.2, 'https://dummyimage.com/500x750/111/eee.jpg&text=The+Godfather+(1972)', 'https://www.youtube.com/watch?v=sY1S34973zA', 14),
+('The Shawshank Redemption', 1994, 9.3, 'https://dummyimage.com/500x750/111/eee.jpg&text=The+Shawshank+Redemption+(1994)', 'https://www.youtube.com/watch?v=6hB3S9bIaco', 15),
+('The Matrix',         1999, 8.7, 'https://dummyimage.com/500x750/111/eee.jpg&text=The+Matrix+(1999)', 'https://www.youtube.com/watch?v=m8e-FF8MsqU', 16),
+('Gladiator',          2000, 8.5, 'https://dummyimage.com/500x750/111/eee.jpg&text=Gladiator+(2000)', 'https://www.youtube.com/watch?v=P5ieIbInFpg', 17),
+('Parasite',           2019, 8.5, 'https://dummyimage.com/500x750/111/eee.jpg&text=Parasite+(2019)', 'https://www.youtube.com/watch?v=5xH0HfJHsaY', 18),
+('Whiplash',           2014, 8.5, 'https://dummyimage.com/500x750/111/eee.jpg&text=Whiplash+(2014)', 'https://www.youtube.com/watch?v=7d_jQycdQGo', 19),
+('Mad Max: Fury Road', 2015, 8.1, 'https://dummyimage.com/500x750/111/eee.jpg&text=Mad+Max+Fury+Road+(2015)', 'https://www.youtube.com/watch?v=hEJnMQG9ev8', 20),
+('The Lord of the Rings: The Fellowship of the Ring', 2001, 8.8, 'https://dummyimage.com/500x750/111/eee.jpg&text=LOTR+Fellowship+(2001)', 'https://www.youtube.com/watch?v=V75dMMIW2B4', 21),
+('Forrest Gump',       1994, 8.8, 'https://dummyimage.com/500x750/111/eee.jpg&text=Forrest+Gump+(1994)', 'https://www.youtube.com/watch?v=bLvqoHBptjg', 22),
+('Joker',              2019, 8.4, 'https://dummyimage.com/500x750/111/eee.jpg&text=Joker+(2019)', 'https://www.youtube.com/watch?v=zAGVQLHvwOY', 23),
+('The Silence of the Lambs', 1991, 8.6, 'https://dummyimage.com/500x750/111/eee.jpg&text=Silence+of+the+Lambs+(1991)', 'https://www.youtube.com/watch?v=W6Mm8Sbe__o', 24),
+('Spirited Away',      2001, 8.6, 'https://dummyimage.com/500x750/111/eee.jpg&text=Spirited+Away+(2001)', 'https://www.youtube.com/watch?v=ByXuk9QqQkk', 25),
+('Coco',               2017, 8.4, 'https://dummyimage.com/500x750/111/eee.jpg&text=Coco+(2017)', 'https://www.youtube.com/watch?v=xlnPHQ3TLX8', 26),
+('Your Name',          2016, 8.4, 'https://dummyimage.com/500x750/111/eee.jpg&text=Your+Name+(2016)', 'https://www.youtube.com/watch?v=xU47nhruN-Q', 27),
+('The Social Network', 2010, 7.8, 'https://dummyimage.com/500x750/111/eee.jpg&text=The+Social+Network+(2010)', 'https://www.youtube.com/watch?v=lB95KLmpLR4', 6),
+('Prisoners',          2013, 8.1, 'https://dummyimage.com/500x750/111/eee.jpg&text=Prisoners+(2013)', 'https://www.youtube.com/watch?v=bpXfcTF6iVk', 7),
+('Zodiac',             2007, 7.7, 'https://dummyimage.com/500x750/111/eee.jpg&text=Zodiac+(2007)', 'https://www.youtube.com/watch?v=yNncHPl1UXg', 6),
+('The Grand Budapest Hotel', 2014, 8.1, 'https://dummyimage.com/500x750/111/eee.jpg&text=Grand+Budapest+Hotel+(2014)', 'https://www.youtube.com/watch?v=1Fg5iWmQjwk', 30),
+('Oppenheimer',        2023, 8.4, 'https://dummyimage.com/500x750/111/eee.jpg&text=Oppenheimer+(2023)', 'https://www.youtube.com/watch?v=uYPbbksJxIg', 1),
+('Avatar: The Way of Water', 2022, 7.6, 'https://dummyimage.com/500x750/111/eee.jpg&text=Avatar+Way+of+Water+(2022)', 'https://www.youtube.com/watch?v=d9MyW72ELq0', 4),
+('Top Gun: Maverick',  2022, 8.2, 'https://dummyimage.com/500x750/111/eee.jpg&text=Top+Gun+Maverick+(2022)', 'https://www.youtube.com/watch?v=giXco2jaZ_4', 31),
+('The Batman',         2022, 7.8, 'https://dummyimage.com/500x750/111/eee.jpg&text=The+Batman+(2022)', 'https://www.youtube.com/watch?v=mqqft2x_Aa4', 32),
+('No Country for Old Men', 2007, 8.2, 'https://dummyimage.com/500x750/111/eee.jpg&text=No+Country+for+Old+Men+(2007)', 'https://www.youtube.com/watch?v=38A__WT3-o0', 33),
+('La La Land',         2016, 8.0, 'https://dummyimage.com/500x750/111/eee.jpg&text=La+La+Land+(2016)', 'https://www.youtube.com/watch?v=0pdqf4P9MB8', 19),
+('Blade Runner',       1982, 8.1, 'https://dummyimage.com/500x750/111/eee.jpg&text=Blade+Runner+(1982)', 'https://www.youtube.com/watch?v=eogpIG53Cis', 17);
 
 -- Movie-Genre mappings
 INSERT IGNORE INTO MOVIE_GENRE VALUES
@@ -187,11 +240,47 @@ INSERT IGNORE INTO MOVIE_GENRE VALUES
 (24,5),(24,6),(24,2),  -- Inglourious Basterds: Crime,Drama,Adventure
 (25,13),(25,5),(25,6), -- Catch Me If You Can: Biography,Crime,Drama
 (26,11),(26,2),(26,6), -- The Martian: Sci-Fi,Adventure,Drama
-(27,13),(27,5),(27,6); -- The Wolf of Wall Street: Biography,Crime,Drama
+(27,13),(27,5),(27,6), -- The Wolf of Wall Street: Biography,Crime,Drama
+(28,6),(28,13),(28,14),-- Dangal: Drama,Biography,History
+(29,1),(29,2),(29,6),  -- RRR: Action,Adventure,Drama
+(30,1),(30,5),(30,12), -- Vikram: Action,Crime,Thriller
+(31,6),(31,9),(31,12), -- Drishyam: Drama,Mystery,Thriller
+(32,1),(32,5),(32,6),  -- KGF: Chapter 1: Action,Crime,Drama
+(33,5),(33,6),         -- The Godfather: Crime,Drama
+(34,5),(34,6),         -- The Shawshank Redemption: Crime,Drama
+(35,1),(35,11),        -- The Matrix: Action,Sci-Fi
+(36,1),(36,2),(36,6),  -- Gladiator: Action,Adventure,Drama
+(37,5),(37,6),(37,12), -- Parasite: Crime,Drama,Thriller
+(38,6),                -- Whiplash: Drama
+(39,1),(39,2),(39,11), -- Mad Max: Fury Road: Action,Adventure,Sci-Fi
+(40,2),(40,7),(40,6),  -- LOTR Fellowship: Adventure,Fantasy,Drama
+(41,6),(41,10),        -- Forrest Gump: Drama,Romance
+(42,5),(42,6),(42,12), -- Joker: Crime,Drama,Thriller
+(43,5),(43,6),(43,12), -- The Silence of the Lambs: Crime,Drama,Thriller
+(44,3),(44,2),(44,7),  -- Spirited Away: Animation,Adventure,Fantasy
+(45,3),(45,2),(45,7),  -- Coco: Animation,Adventure,Fantasy
+(46,3),(46,10),(46,7), -- Your Name: Animation,Romance,Fantasy
+(47,6),(47,13),        -- The Social Network: Drama,Biography
+(48,5),(48,6),(48,9),  -- Prisoners: Crime,Drama,Mystery
+(49,5),(49,6),(49,9),  -- Zodiac: Crime,Drama,Mystery
+(50,4),(50,5),(50,2),  -- The Grand Budapest Hotel: Comedy,Crime,Adventure
+(51,6),(51,13),(51,14),-- Oppenheimer: Drama,Biography,History
+(52,1),(52,2),(52,11), -- Avatar: The Way of Water: Action,Adventure,Sci-Fi
+(53,1),(53,6),         -- Top Gun: Maverick: Action,Drama
+(54,1),(54,5),(54,9),  -- The Batman: Action,Crime,Mystery
+(55,5),(55,6),(55,12), -- No Country for Old Men: Crime,Drama,Thriller
+(56,4),(56,6),(56,10), -- La La Land: Comedy,Drama,Romance
+(57,11),(57,12),(57,6);-- Blade Runner: Sci-Fi,Thriller,Drama
 
 -- Movie-Platform mappings
 INSERT IGNORE INTO MOVIE_PLATFORM VALUES
 (1,2),(1,4),(2,2),(3,4),(3,1),(4,1),(5,6),(6,1),(7,1),(8,3),
 (9,2),(10,1),(11,4),(12,1),(12,4),(13,1),(14,2),(15,1),(16,2),(17,1),
 (18,1),(18,4),(19,1),(19,3),(20,1),(21,4),(22,1),(22,4),(23,4),(23,1),
-(24,1),(24,2),(25,2),(26,3),(26,2),(27,1),(27,4);
+(24,1),(24,2),(25,2),(26,3),(26,2),(27,1),(27,4),
+(28,2),(28,1),(29,2),(29,1),(30,1),(30,2),(31,2),(31,1),(32,1),(32,2),
+(33,1),(33,2),(34,1),(34,2),(35,1),(35,4),(36,1),(36,2),(37,1),(37,4),
+(38,1),(38,4),(39,1),(39,4),(40,1),(40,2),(41,1),(41,2),(42,1),(42,4),
+(43,1),(43,4),(44,1),(44,3),(45,1),(45,3),(46,1),(46,3),(47,1),(47,4),
+(48,1),(48,4),(49,1),(49,4),(50,1),(50,2),(51,1),(51,4),(52,3),(52,1),
+(53,1),(53,2),(54,1),(54,4),(55,1),(55,4),(56,1),(56,2),(57,1),(57,4);
