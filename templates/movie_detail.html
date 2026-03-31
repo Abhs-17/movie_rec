@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}{{ movie.title }} — CineRec{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('movies') }}" class="btn btn-outline" style="margin-bottom:1.5rem;">← Back to Movies</a>
+
+<div class="detail-layout">
+  <!-- Poster -->
+  <div class="detail-poster">
+    {% if movie.poster_url %}
+      <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
+    {% else %}
+      <div style="aspect-ratio:2/3;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:4rem;">🎬</div>
+    {% endif %}
+  </div>
+
+  <!-- Info -->
+  <div>
+    <div class="detail-title">{{ movie.title }}</div>
+    <div class="detail-meta">
+      {% if movie.release_year %}<span class="chip">{{ movie.release_year }}</span>{% endif %}
+      {% if movie.rating %}<span class="chip">⭐ {{ movie.rating }}/10</span>{% endif %}
+    </div>
+
+    {% if movie.director %}
+    <p style="margin-bottom:.8rem;color:var(--muted);">
+      Directed by <strong style="color:var(--text);">{{ movie.director }}</strong>
+      {% if movie.nationality %}<span style="font-size:.82rem;">({{ movie.nationality }})</span>{% endif %}
+    </p>
+    {% endif %}
+
+    {% if movie.genres %}
+    <div style="margin-bottom:1.2rem;">
+      {% for g in movie.genres %}<span class="genre-tag">{{ g }}</span>{% endfor %}
+    </div>
+    {% endif %}
+
+    {% if movie.platforms %}
+    <div>
+      <div class="section-title" style="font-size:1rem;margin-bottom:.6rem;">STREAM ON</div>
+      <div class="platform-links">
+        {% for p in movie.platforms %}
+        <a href="{{ p.platform_url }}" target="_blank" class="platform-link">▶ {{ p.platform_name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if movie.trailer_url %}
+    <div style="margin-top:1.5rem;">
+      <a href="{{ movie.trailer_url }}" target="_blank" class="btn btn-primary">▶ Watch Trailer</a>
+    </div>
+    {% endif %}
+
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:.8rem;">
+      <form method="POST" action="{{ url_for('delete_movie', movie_id=movie.movie_id) }}"
+            onsubmit="return confirm('Delete this movie? This cannot be undone.')">
+        <button class="btn btn-danger" type="submit">Delete Movie</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Similar Movies -->
+{% if similar %}
+<div>
+  <div class="section-title">SIMILAR MOVIES</div>
+  <div class="movie-grid">
+    {% for m in similar %}
+    <a href="{{ url_for('movie_detail', movie_id=m.movie_id) }}" style="text-decoration:none;">
+      <div class="movie-card">
+        {% if m.poster_url %}
+          <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
+        {% else %}
+          <div class="poster-placeholder">🎬</div>
+        {% endif %}
+        <div class="card-body">
+          <div class="card-title">{{ m.title }}</div>
+          {% if m.rating %}<div class="rating">⭐ {{ m.rating }}</div>{% endif %}
+          <div style="margin-top:.3rem;">
+            {% for g in m.genres.split(', ') %}<span class="genre-tag">{{ g }}</span>{% endfor %}
+          </div>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

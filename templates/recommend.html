@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Recommend — CineRec{% endblock %}
+{% block content %}
+
+<div class="rec-hero">
+  <h1>DISCOVER</h1>
+  <p>Enter a movie you love — we'll find what you'll love next.</p>
+  <form method="POST" class="rec-search">
+    <input class="form-control" name="title" placeholder="e.g. Inception, 3 Idiots…"
+           value="{{ query_title }}" required autofocus>
+    <button class="btn btn-primary" type="submit">Find Similar</button>
+  </form>
+</div>
+
+{% if query_title and not results %}
+<div class="empty">
+  <div class="icon">🔍</div>
+  <p>No movie matching "<strong>{{ query_title }}</strong>" found in the database.<br>
+     <a href="{{ url_for('add_movie') }}">Add it first →</a>
+  </p>
+</div>
+{% endif %}
+
+{% if results %}
+<div class="page-header" style="margin-top:1rem;">
+  <div>
+    <h1>RESULTS</h1>
+    <div class="sub">Movies similar to "{{ query_title }}" — {{ results|length }} found</div>
+  </div>
+</div>
+<div class="movie-grid">
+  {% for m in results %}
+  <a href="{{ url_for('movie_detail', movie_id=m.movie_id) }}" style="text-decoration:none;">
+    <div class="movie-card">
+      {% if m.poster_url %}
+        <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
+      {% else %}
+        <div class="poster-placeholder">🎬</div>
+      {% endif %}
+      <div class="card-body">
+        <div class="card-title">{{ m.title }}</div>
+        <div class="card-meta">{{ m.director }}</div>
+        {% if m.rating %}<div class="rating">⭐ {{ m.rating }}</div>{% endif %}
+        <div style="margin-top:.4rem;">
+          <span class="score-badge">{{ "%.0f"|format(m.similarity_score*100) }}% match</span>
+        </div>
+        {% if m.genres %}
+        <div style="margin-top:.4rem;">
+          {% for g in m.genres.split(', ') %}<span class="genre-tag">{{ g }}</span>{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Add Movie — CineRec{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>ADD MOVIE</h1>
+    <div class="sub">Add a new movie to the database</div>
+  </div>
+  <a href="{{ url_for('movies') }}" class="btn btn-outline">← Back</a>
+</div>
+
+<div style="max-width:700px;">
+  <form method="POST" class="card">
+    <div class="two-col">
+      <div class="form-group">
+        <label>Title *</label>
+        <input class="form-control" name="title" required autofocus>
+      </div>
+      <div class="form-group">
+        <label>Release Year</label>
+        <input class="form-control" name="release_year" type="number" min="1880" max="2030" placeholder="e.g. 2023">
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label>Rating (0–10)</label>
+        <input class="form-control" name="rating" type="number" step="0.1" min="0" max="10" placeholder="e.g. 8.5">
+      </div>
+      <div class="form-group">
+        <label>Director</label>
+        <select class="form-control" name="director_id">
+          <option value="">— Select Director —</option>
+          {% for d in directors %}
+          <option value="{{ d.director_id }}">{{ d.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Poster URL</label>
+      <input class="form-control" name="poster_url" type="url" placeholder="https://...">
+    </div>
+    <div class="form-group">
+      <label>Trailer URL (YouTube)</label>
+      <input class="form-control" name="trailer_url" type="url" placeholder="https://www.youtube.com/watch?v=...">
+    </div>
+
+    <div class="form-group">
+      <label>Genres</label>
+      <div class="checkbox-group">
+        {% for g in genres %}
+        <label>
+          <input type="checkbox" name="genres" value="{{ g.genre_id }}">
+          {{ g.genre_name }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Available On Platforms</label>
+      <div class="checkbox-group">
+        {% for p in platforms %}
+        <label>
+          <input type="checkbox" name="platforms" value="{{ p.platform_id }}">
+          {{ p.platform_name }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.8rem;margin-top:.5rem;">
+      <button class="btn btn-primary" type="submit">Save Movie</button>
+      <a href="{{ url_for('movies') }}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}CineRec{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+{% if session.user_id %}
+<nav class="navbar">
+  <a class="nav-brand" href="{{ url_for('dashboard') }}">CINE<span>REC</span></a>
+  <ul class="nav-links">
+    <li><a href="{{ url_for('dashboard') }}" class="{% if request.endpoint=='dashboard' %}active{% endif %}">Dashboard</a></li>
+    <li><a href="{{ url_for('movies') }}"    class="{% if request.endpoint in ['movies','movie_detail','add_movie'] %}active{% endif %}">Movies</a></li>
+    <li><a href="{{ url_for('recommend') }}" class="{% if request.endpoint=='recommend' %}active{% endif %}">Recommend</a></li>
+    <li><a href="{{ url_for('directors') }}" class="{% if request.endpoint=='directors' %}active{% endif %}">Directors</a></li>
+    <li><a href="{{ url_for('genres') }}"    class="{% if request.endpoint=='genres' %}active{% endif %}">Genres</a></li>
+    <li><a href="{{ url_for('platforms') }}" class="{% if request.endpoint=='platforms' %}active{% endif %}">Platforms</a></li>
+    <li><a href="{{ url_for('history') }}"   class="{% if request.endpoint=='history' %}active{% endif %}">History</a></li>
+  </ul>
+  <div class="nav-user">
+    <span>{{ session.username }}</span>
+    <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+  </div>
+</nav>
+{% endif %}
+
+<main class="main-content">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="flash flash-{{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

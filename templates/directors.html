@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Directors — CineRec{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div><h1>DIRECTORS</h1><div class="sub">{{ directors|length }} directors in database</div></div>
+</div>
+
+<div class="two-col">
+  <!-- Add form -->
+  <div class="card" style="align-self:start;">
+    <div class="section-title" style="font-size:1.1rem;margin-bottom:1rem;">ADD DIRECTOR</div>
+    <form method="POST">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input class="form-control" name="name" required>
+      </div>
+      <div class="form-group">
+        <label>Nationality</label>
+        <input class="form-control" name="nationality" placeholder="e.g. American">
+      </div>
+      <button class="btn btn-primary" type="submit">Add Director</button>
+    </form>
+  </div>
+
+  <!-- List -->
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Name</th><th>Nationality</th><th>Movies</th></tr></thead>
+        <tbody>
+          {% for d in directors %}
+          <tr>
+            <td style="color:var(--muted);">{{ d.director_id }}</td>
+            <td><strong>{{ d.name }}</strong></td>
+            <td style="color:var(--muted);">{{ d.nationality or '—' }}</td>
+            <td><span class="score-badge">{{ d.movie_count }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

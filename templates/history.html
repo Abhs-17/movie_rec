@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Recommendation History — CineRec{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div><h1>HISTORY</h1><div class="sub">Your recommendation log — {{ recs|length }} records</div></div>
+  <a href="{{ url_for('recommend') }}" class="btn btn-primary">Get Recommendations</a>
+</div>
+
+{% if recs %}
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Movie</th><th>Rating</th><th>Match Score</th><th>Date</th></tr>
+      </thead>
+      <tbody>
+        {% for r in recs %}
+        <tr>
+          <td style="color:var(--muted);">{{ r.rec_id }}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:.7rem;">
+              {% if r.poster_url %}
+              <img src="{{ r.poster_url }}" style="width:36px;height:54px;object-fit:cover;border-radius:4px;">
+              {% endif %}
+              <strong>{{ r.title }}</strong>
+            </div>
+          </td>
+          <td>{% if r.rating %}⭐ {{ r.rating }}{% else %}—{% endif %}</td>
+          <td><span class="score-badge">{{ "%.0f"|format(r.similarity_score*100) }}%</span></td>
+          <td style="color:var(--muted);font-size:.82rem;">{{ r.recommended_at.strftime('%b %d, %Y %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="empty">
+  <div class="icon">📋</div>
+  <p>No recommendation history yet.<br>
+     <a href="{{ url_for('recommend') }}">Start discovering movies →</a>
+  </p>
+</div>
+{% endif %}
+
+{% endblock %}

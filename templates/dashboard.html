@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — CineRec{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>DASHBOARD</h1>
+    <div class="sub">Welcome back, {{ session.username }}</div>
+  </div>
+  <a href="{{ url_for('add_movie') }}" class="btn btn-primary">+ Add Movie</a>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="label">Total Movies</div>
+    <div class="value">{{ movie_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Directors</div>
+    <div class="value">{{ dir_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Genres</div>
+    <div class="value">{{ genre_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Recommendations</div>
+    <div class="value">{{ recent_recs | length }}</div>
+  </div>
+</div>
+
+<div class="two-col">
+  <!-- Top Rated -->
+  <div>
+    <div class="section-title">TOP RATED MOVIES</div>
+    <div class="movie-grid" style="grid-template-columns: repeat(auto-fill,minmax(150px,1fr));">
+      {% for m in top_movies %}
+      <a href="{{ url_for('movie_detail', movie_id=loop.index) }}" style="text-decoration:none;">
+        <div class="movie-card">
+          {% if m.poster_url %}
+            <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
+          {% else %}
+            <div class="poster-placeholder">🎬</div>
+          {% endif %}
+          <div class="card-body">
+            <div class="card-title">{{ m.title }}</div>
+            <div class="rating">⭐ {{ m.rating }}</div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Recent Recommendations -->
+  <div>
+    <div class="section-title">RECENT RECOMMENDATIONS</div>
+    {% if recent_recs %}
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Movie</th><th>Score</th><th>When</th></tr></thead>
+          <tbody>
+            {% for r in recent_recs %}
+            <tr>
+              <td>{{ r.title }}</td>
+              <td><span class="score-badge">{{ "%.0f"|format(r.similarity_score*100) }}%</span></td>
+              <td style="color:var(--muted);font-size:.8rem;">{{ r.recommended_at.strftime('%b %d, %Y') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:1rem;">
+        <a href="{{ url_for('history') }}" class="btn btn-outline" style="font-size:.82rem;">View All →</a>
+      </div>
+    </div>
+    {% else %}
+    <div class="empty">
+      <div class="icon">🎯</div>
+      <p>No recommendations yet.<br><a href="{{ url_for('recommend') }}">Get started →</a></p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

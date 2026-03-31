@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Platforms — CineRec{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div><h1>PLATFORMS</h1><div class="sub">Streaming services</div></div>
+</div>
+
+<div class="two-col">
+  <div class="card" style="align-self:start;">
+    <div class="section-title" style="font-size:1.1rem;margin-bottom:1rem;">ADD PLATFORM</div>
+    <form method="POST">
+      <div class="form-group">
+        <label>Platform Name *</label>
+        <input class="form-control" name="platform_name" required placeholder="e.g. Peacock">
+      </div>
+      <div class="form-group">
+        <label>Platform URL</label>
+        <input class="form-control" type="url" name="platform_url" placeholder="https://...">
+      </div>
+      <button class="btn btn-primary" type="submit">Add Platform</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Platform</th><th>URL</th></tr></thead>
+        <tbody>
+          {% for p in platforms %}
+          <tr>
+            <td style="color:var(--muted);">{{ p.platform_id }}</td>
+            <td><strong>{{ p.platform_name }}</strong></td>
+            <td>
+              {% if p.platform_url %}
+              <a href="{{ p.platform_url }}" target="_blank" style="font-size:.82rem;">{{ p.platform_url }}</a>
+              {% else %}—{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

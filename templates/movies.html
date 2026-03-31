@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Movies — CineRec{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>MOVIES</h1>
+    <div class="sub">{{ movies|length }} movie{{ 's' if movies|length != 1 }}</div>
+  </div>
+  <a href="{{ url_for('add_movie') }}" class="btn btn-primary">+ Add Movie</a>
+</div>
+
+<!-- Search & Filter -->
+<form method="GET" class="search-bar">
+  <input class="form-control" name="q" placeholder="Search by title…" value="{{ search }}">
+  <select class="form-control" name="genre" style="max-width:180px;">
+    <option value="">All Genres</option>
+    {% for g in genres %}
+    <option value="{{ g }}" {% if g == selected_genre %}selected{% endif %}>{{ g }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-primary" type="submit">Search</button>
+  {% if search or selected_genre %}
+  <a href="{{ url_for('movies') }}" class="btn btn-outline">Clear</a>
+  {% endif %}
+</form>
+
+{% if movies %}
+<div class="movie-grid">
+  {% for m in movies %}
+  <a href="{{ url_for('movie_detail', movie_id=m.movie_id) }}" style="text-decoration:none;">
+    <div class="movie-card">
+      {% if m.poster_url %}
+        <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
+      {% else %}
+        <div class="poster-placeholder">🎬</div>
+      {% endif %}
+      <div class="card-body">
+        <div class="card-title">{{ m.title }}</div>
+        <div class="card-meta">
+          {% if m.release_year %}{{ m.release_year }}{% endif %}
+          {% if m.director %} · {{ m.director }}{% endif %}
+        </div>
+        {% if m.rating %}<div class="rating">⭐ {{ m.rating }}</div>{% endif %}
+        {% if m.genres %}
+        <div style="margin-top:.4rem;">
+          {% for g in m.genres.split(', ') %}
+            <span class="genre-tag">{{ g }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <div class="icon">🎬</div>
+  <p>No movies found.</p>
+  <a href="{{ url_for('add_movie') }}" class="btn btn-primary" style="margin-top:1rem;">Add First Movie</a>
+</div>
+{% endif %}
+
+{% endblock %}
