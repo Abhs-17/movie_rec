@@ -7,7 +7,9 @@
     <h1>MOVIES</h1>
     <div class="sub">{{ movies|length }} movie{{ 's' if movies|length != 1 }}</div>
   </div>
+  {% if session.get('role') == 'admin' %}
   <a href="{{ url_for('add_movie') }}" class="btn btn-primary">+ Add Movie</a>
+  {% endif %}
 </div>
 
 <!-- Search & Filter -->
@@ -58,7 +60,9 @@
 <div class="empty">
   <div class="icon">🎬</div>
   <p>No movies found.</p>
+  {% if session.get('role') == 'admin' %}
   <a href="{{ url_for('add_movie') }}" class="btn btn-primary" style="margin-top:1rem;">Add First Movie</a>
+  {% endif %}
 </div>
 {% endif %}
 

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS USER (
     username      VARCHAR(50)  NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     email         VARCHAR(100) NOT NULL UNIQUE,
+    role          ENUM('admin', 'user') NOT NULL DEFAULT 'user',
     created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS MOVIE (
     poster_url   TEXT,
     trailer_url  TEXT,
     director_id  INT,
+    UNIQUE KEY uq_movie_title_year (title, release_year),
     FOREIGN KEY (director_id) REFERENCES DIRECTOR(director_id) ON DELETE SET NULL
 );
 CREATE INDEX idx_movie_title ON MOVIE(title);
@@ -84,8 +86,8 @@ CREATE INDEX idx_rec_user ON RECOMMENDATION(user_id);
 -- ============================================================
 
 -- Default admin user  (password: admin123)
-INSERT IGNORE INTO USER (username, email, password_hash) VALUES
-('admin','admin@movrec.com','240be518fabd2724ddb6f04eeb1da5967448d7e831d1e05a8a7e1c2e5b8a0c0c');
+INSERT IGNORE INTO USER (username, email, password_hash, role) VALUES
+('admin','admin@movrec.com','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9','admin');
 
 -- Directors
 INSERT IGNORE INTO DIRECTOR (name, nationality) VALUES
@@ -108,10 +110,10 @@ INSERT IGNORE INTO GENRE (genre_name) VALUES
 INSERT IGNORE INTO STREAMING_PLATFORM (platform_name, platform_url) VALUES
 ('Netflix',       'https://www.netflix.com'),
 ('Prime Video',   'https://www.primevideo.com'),
-('Disney+',       'https://www.disneyplus.com'),
+('Disney+',       'https://www.justwatch.com/us/provider/disney-plus'),
 ('HBO Max',       'https://www.max.com'),
 ('Apple TV+',     'https://tv.apple.com'),
-('Hulu',          'https://www.hulu.com');
+('Hulu',          'https://www.justwatch.com/us/provider/hulu');
 
 -- Movies
 INSERT IGNORE INTO MOVIE (title, release_year, rating, poster_url, trailer_url, director_id) VALUES
@@ -119,9 +121,9 @@ INSERT IGNORE INTO MOVIE (title, release_year, rating, poster_url, trailer_url, 
 ('Interstellar',       2014, 8.6, 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', 'https://www.youtube.com/watch?v=zSWdZVtXT7E', 1),
 ('The Dark Knight',    2008, 9.0, 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg', 'https://www.youtube.com/watch?v=EXeTwQWrcwY', 1),
 ("Schindler's List",   1993, 9.0, 'https://image.tmdb.org/t/p/w500/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg', 'https://www.youtube.com/watch?v=gG22XNhtnoY', 2),
-('Jaws',               1975, 8.0, 'https://image.tmdb.org/t/p/w500/lxM6kqilAdpdhqUl937MTTxliog.jpg', 'https://www.youtube.com/watch?v=U1fu_sA7XhE', 2),
+('Jaws',               1975, 8.0, 'https://img.youtube.com/vi/U1fu_sA7XhE/hqdefault.jpg', 'https://www.youtube.com/watch?v=U1fu_sA7XhE', 2),
 ('3 Idiots',           2009, 8.4, 'https://image.tmdb.org/t/p/w500/66A9MqXOyVFCssoloscw79z8Tew.jpg', 'https://www.youtube.com/watch?v=xvszmNXdM4w', 3),
-('PK',                 2014, 8.1, 'https://image.tmdb.org/t/p/w500/7bkdEAFeMWIm5SXsXdYj3VqJsde.jpg', 'https://www.youtube.com/watch?v=IjVMpFIRRW0', 3),
+('PK',                 2014, 8.1, 'https://dummyimage.com/500x750/111/eee.jpg&text=PK+(2014)', 'https://www.youtube.com/watch?v=IjVMpFIRRW0', 3),
 ('Avatar',             2009, 7.9, 'https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg', 'https://www.youtube.com/watch?v=5PSNL1qE6VY', 4),
 ('Titanic',            1997, 7.9, 'https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg', 'https://www.youtube.com/watch?v=2e-eXJ6HgkQ', 4),
 ('Goodfellas',         1990, 8.7, 'https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg', 'https://www.youtube.com/watch?v=qo5jJpHtI1Y', 5),
@@ -131,7 +133,17 @@ INSERT IGNORE INTO MOVIE (title, release_year, rating, poster_url, trailer_url, 
 ('Arrival',            2016, 7.9, 'https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg', 'https://www.youtube.com/watch?v=tFMo3UJ4B4g', 7),
 ('Dune',               2021, 8.0, 'https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg', 'https://www.youtube.com/watch?v=8g18jFHCLXk', 7),
 ('Pulp Fiction',       1994, 8.9, 'https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg', 'https://www.youtube.com/watch?v=s7EdQ4FqbhY', 8),
-('Django Unchained',   2012, 8.4, 'https://image.tmdb.org/t/p/w500/7oWY8VDWW7thTzWh3OKYRkWAJFj.jpg', 'https://www.youtube.com/watch?v=eUdM9vrCbow', 8);
+('Django Unchained',   2012, 8.4, 'https://dummyimage.com/500x750/111/eee.jpg&text=Django+Unchained+(2012)', 'https://www.youtube.com/watch?v=eUdM9vrCbow', 8),
+('The Prestige',       2006, 8.5, 'https://img.youtube.com/vi/o4gHCmTQDVI/hqdefault.jpg', 'https://www.youtube.com/watch?v=o4gHCmTQDVI', 1),
+('Saving Private Ryan',1998, 8.6, 'https://image.tmdb.org/t/p/w500/uqx37cS8cpHg8U35f9U5IBlrCV3.jpg', 'https://www.youtube.com/watch?v=9CiW_DgxCnQ', 2),
+('Munna Bhai M.B.B.S.',2003, 8.1, 'https://dummyimage.com/500x750/111/eee.jpg&text=Munna+Bhai+M.B.B.S.+(2003)', 'https://www.youtube.com/watch?v=6zvZQZxPf1A', 3),
+('Shutter Island',     2010, 8.2, 'https://image.tmdb.org/t/p/w500/kve20tXwUZpu4GUX8l6X7Z4jmL6.jpg', 'https://www.youtube.com/watch?v=5iaYLCiq5RM', 5),
+('Gone Girl',          2014, 8.1, 'https://img.youtube.com/vi/2-_-1nJf8Vg/hqdefault.jpg', 'https://www.youtube.com/watch?v=2-_-1nJf8Vg', 6),
+('Blade Runner 2049',  2017, 8.0, 'https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg', 'https://www.youtube.com/watch?v=gCcx85zbxz4', 7),
+('Inglourious Basterds',2009,8.3, 'https://image.tmdb.org/t/p/w500/7sfbEnaARXDDhKm0CZ7D7uc2sbo.jpg', 'https://www.youtube.com/watch?v=KnrRy6kSFF0', 8),
+('Catch Me If You Can',2002, 8.1, 'https://img.youtube.com/vi/71rDQ7z4eFg/hqdefault.jpg', 'https://www.youtube.com/watch?v=71rDQ7z4eFg', 2),
+('The Martian',        2015, 8.0, 'https://img.youtube.com/vi/ej3ioOneTy8/hqdefault.jpg', 'https://www.youtube.com/watch?v=ej3ioOneTy8', 7),
+('The Wolf of Wall Street', 2013, 8.2, 'https://image.tmdb.org/t/p/w500/sOxr33wnRuKazR9ClHek73T8qnK.jpg', 'https://www.youtube.com/watch?v=iszwuX1AK6A', 5);
 
 -- Movie-Genre mappings
 INSERT IGNORE INTO MOVIE_GENRE VALUES
@@ -151,9 +163,21 @@ INSERT IGNORE INTO MOVIE_GENRE VALUES
 (14,6),(14,11),(14,12),-- Arrival: Drama,Sci-Fi,Thriller
 (15,2),(15,11),(15,6), -- Dune: Adventure,Sci-Fi,Drama
 (16,5),(16,12),(16,4), -- Pulp Fiction: Crime,Thriller,Comedy
-(17,1),(17,5),(17,6);  -- Django: Action,Crime,Drama
+(17,1),(17,5),(17,6),  -- Django: Action,Crime,Drama
+(18,6),(18,9),(18,12), -- The Prestige: Drama,Mystery,Thriller
+(19,1),(19,6),(19,14), -- Saving Private Ryan: Action,Drama,History
+(20,4),(20,6),         -- Munna Bhai M.B.B.S.: Comedy,Drama
+(21,9),(21,12),(21,6), -- Shutter Island: Mystery,Thriller,Drama
+(22,9),(22,12),(22,6), -- Gone Girl: Mystery,Thriller,Drama
+(23,11),(23,12),(23,6),-- Blade Runner 2049: Sci-Fi,Thriller,Drama
+(24,5),(24,6),(24,2),  -- Inglourious Basterds: Crime,Drama,Adventure
+(25,13),(25,5),(25,6), -- Catch Me If You Can: Biography,Crime,Drama
+(26,11),(26,2),(26,6), -- The Martian: Sci-Fi,Adventure,Drama
+(27,13),(27,5),(27,6); -- The Wolf of Wall Street: Biography,Crime,Drama
 
 -- Movie-Platform mappings
 INSERT IGNORE INTO MOVIE_PLATFORM VALUES
 (1,2),(1,4),(2,2),(3,4),(3,1),(4,1),(5,6),(6,1),(7,1),(8,3),
-(9,2),(10,1),(11,4),(12,1),(12,4),(13,1),(14,2),(15,1),(16,2),(17,1);
+(9,2),(10,1),(11,4),(12,1),(12,4),(13,1),(14,2),(15,1),(16,2),(17,1),
+(18,1),(18,4),(19,1),(19,3),(20,1),(21,4),(22,1),(22,4),(23,4),(23,1),
+(24,1),(24,2),(25,2),(26,3),(26,2),(27,1),(27,4);

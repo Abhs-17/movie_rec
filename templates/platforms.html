@@ -7,6 +7,7 @@
 </div>
 
 <div class="two-col">
+  {% if session.get('role') == 'admin' %}
   <div class="card" style="align-self:start;">
     <div class="section-title" style="font-size:1.1rem;margin-bottom:1rem;">ADD PLATFORM</div>
     <form method="POST">
@@ -21,6 +22,7 @@
       <button class="btn btn-primary" type="submit">Add Platform</button>
     </form>
   </div>
+  {% endif %}
 
   <div class="card">
     <div class="table-wrap">

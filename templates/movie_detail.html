@@ -52,12 +52,14 @@
     </div>
     {% endif %}
 
+    {% if session.get('role') == 'admin' %}
     <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:.8rem;">
       <form method="POST" action="{{ url_for('delete_movie', movie_id=movie.movie_id) }}"
             onsubmit="return confirm('Delete this movie? This cannot be undone.')">
         <button class="btn btn-danger" type="submit">Delete Movie</button>
       </form>
     </div>
+    {% endif %}
   </div>
 </div>
 

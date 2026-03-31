@@ -31,6 +31,17 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def admin_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
+        if session.get('role') != 'admin':
+            flash('Admin access required.', 'error')
+            return redirect(url_for('dashboard'))
+        return f(*args, **kwargs)
+    return decorated
+
 # ─── ROUTES ───────────────────────────────────────────────────────────────────
 
 @app.route('/')
@@ -51,6 +62,7 @@ def login():
         if user:
             session['user_id'] = user['user_id']
             session['username'] = user['username']
+            session['role'] = user.get('role', 'user')
             return redirect(url_for('dashboard'))
         flash('Invalid credentials', 'error')
     return render_template('login.html')
@@ -63,8 +75,8 @@ def register():
         password = hash_password(request.form['password'])
         try:
             db = get_db(); cur = db.cursor()
-            cur.execute("INSERT INTO USER (username,email,password_hash) VALUES (%s,%s,%s)",
-                        (username, email, password))
+            cur.execute("INSERT INTO USER (username,email,password_hash,role) VALUES (%s,%s,%s,%s)",
+                        (username, email, password, 'user'))
             db.commit(); db.close()
             flash('Account created! Please log in.', 'success')
             return redirect(url_for('login'))
@@ -134,7 +146,7 @@ def movies():
     return render_template('movies.html', movies=movie_list, genres=genres, search=search, selected_genre=genre)
 
 @app.route('/movies/add', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def add_movie():
     db = get_db(); cur = db.cursor(dictionary=True)
     if request.method == 'POST':
@@ -145,8 +157,13 @@ def add_movie():
         trailer_url = request.form.get('trailer_url') or None
         director_id = request.form.get('director_id') or None
         cur2 = db.cursor()
-        cur2.execute("INSERT INTO MOVIE (title,release_year,rating,poster_url,trailer_url,director_id) VALUES (%s,%s,%s,%s,%s,%s)",
-                     (title, year, rating, poster_url, trailer_url, director_id))
+        try:
+            cur2.execute("INSERT INTO MOVIE (title,release_year,rating,poster_url,trailer_url,director_id) VALUES (%s,%s,%s,%s,%s,%s)",
+                         (title, year, rating, poster_url, trailer_url, director_id))
+        except mysql.connector.IntegrityError:
+            db.close()
+            flash('Movie already exists for the selected release year.', 'error')
+            return redirect(url_for('add_movie'))
         movie_id = cur2.lastrowid
         for gid in request.form.getlist('genres'):
             cur2.execute("INSERT IGNORE INTO MOVIE_GENRE VALUES (%s,%s)", (movie_id, gid))
@@ -202,7 +219,7 @@ def movie_detail(movie_id):
     return render_template('movie_detail.html', movie=movie, similar=similar)
 
 @app.route('/movies/<int:movie_id>/delete', methods=['POST'])
-@login_required
+@admin_required
 def delete_movie(movie_id):
     db = get_db(); cur = db.cursor()
     cur.execute("DELETE FROM MOVIE WHERE movie_id=%s", (movie_id,))
@@ -261,7 +278,7 @@ def recommend():
 
 # ── Directors ─────────────────────────────────────────────────────────────────
 @app.route('/directors', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def directors():
     db = get_db(); cur = db.cursor(dictionary=True)
     if request.method == 'POST':
@@ -282,7 +299,7 @@ def directors():
 
 # ── Genres ────────────────────────────────────────────────────────────────────
 @app.route('/genres', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def genres():
     db = get_db(); cur = db.cursor(dictionary=True)
     if request.method == 'POST':
@@ -305,7 +322,7 @@ def genres():
 
 # ── Platforms ─────────────────────────────────────────────────────────────────
 @app.route('/platforms', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def platforms():
     db = get_db(); cur = db.cursor(dictionary=True)
     if request.method == 'POST':

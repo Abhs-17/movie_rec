@@ -7,7 +7,9 @@
     <h1>DASHBOARD</h1>
     <div class="sub">Welcome back, {{ session.username }}</div>
   </div>
+  {% if session.get('role') == 'admin' %}
   <a href="{{ url_for('add_movie') }}" class="btn btn-primary">+ Add Movie</a>
+  {% endif %}
 </div>
 
 <!-- Stats -->

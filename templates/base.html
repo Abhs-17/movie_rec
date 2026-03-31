@@ -16,13 +16,16 @@
     <li><a href="{{ url_for('dashboard') }}" class="{% if request.endpoint=='dashboard' %}active{% endif %}">Dashboard</a></li>
     <li><a href="{{ url_for('movies') }}"    class="{% if request.endpoint in ['movies','movie_detail','add_movie'] %}active{% endif %}">Movies</a></li>
     <li><a href="{{ url_for('recommend') }}" class="{% if request.endpoint=='recommend' %}active{% endif %}">Recommend</a></li>
+    {% if session.get('role') == 'admin' %}
     <li><a href="{{ url_for('directors') }}" class="{% if request.endpoint=='directors' %}active{% endif %}">Directors</a></li>
     <li><a href="{{ url_for('genres') }}"    class="{% if request.endpoint=='genres' %}active{% endif %}">Genres</a></li>
     <li><a href="{{ url_for('platforms') }}" class="{% if request.endpoint=='platforms' %}active{% endif %}">Platforms</a></li>
+    {% endif %}
     <li><a href="{{ url_for('history') }}"   class="{% if request.endpoint=='history' %}active{% endif %}">History</a></li>
   </ul>
   <div class="nav-user">
     <span>{{ session.username }}</span>
+    <span style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">{{ session.get('role', 'user') }}</span>
     <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
   </div>
 </nav>
