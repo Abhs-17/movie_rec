@@ -104,7 +104,8 @@ def dashboard():
     """, (session['user_id'],))
     recent_recs = cur.fetchall()
     cur.execute("""
-        SELECT M.title, M.rating, M.poster_url, GROUP_CONCAT(G.genre_name SEPARATOR ', ') AS genres
+        SELECT M.movie_id, M.title, M.rating, M.poster_url, M.trailer_url,
+               GROUP_CONCAT(G.genre_name SEPARATOR ', ') AS genres
         FROM MOVIE M LEFT JOIN MOVIE_GENRE MG ON M.movie_id=MG.movie_id
         LEFT JOIN GENRE G ON MG.genre_id=G.genre_id
         GROUP BY M.movie_id ORDER BY M.rating DESC LIMIT 6
@@ -124,7 +125,7 @@ def movies():
     genre  = request.args.get('genre', '')
     db = get_db(); cur = db.cursor(dictionary=True)
     query = """
-        SELECT M.movie_id, M.title, M.release_year, M.rating, M.poster_url,
+        SELECT M.movie_id, M.title, M.release_year, M.rating, M.poster_url, M.trailer_url,
                D.name AS director, GROUP_CONCAT(G.genre_name SEPARATOR ', ') AS genres
         FROM MOVIE M
         LEFT JOIN DIRECTOR D ON M.director_id=D.director_id
@@ -186,7 +187,9 @@ def add_movie():
 def movie_detail(movie_id):
     db = get_db(); cur = db.cursor(dictionary=True)
     cur.execute("""
-        SELECT M.*, D.name AS director, D.nationality
+        SELECT M.*, D.name AS director, D.nationality,
+               (SELECT ROUND(AVG(R.rating), 1) FROM REVIEW R WHERE R.movie_id=M.movie_id) AS user_avg_rating,
+               (SELECT COUNT(*) FROM REVIEW R WHERE R.movie_id=M.movie_id) AS user_review_count
         FROM MOVIE M LEFT JOIN DIRECTOR D ON M.director_id=D.director_id
         WHERE M.movie_id=%s
     """, (movie_id,))
@@ -215,8 +218,43 @@ def movie_detail(movie_id):
         GROUP BY M2.movie_id ORDER BY shared_genres DESC, M2.rating DESC LIMIT 4
     """, (movie_id, movie_id))
     similar = cur.fetchall()
+    cur.execute("""
+        SELECT R.rating, R.review_text, R.created_at, U.username
+        FROM REVIEW R JOIN USER U ON R.user_id=U.user_id
+        WHERE R.movie_id=%s
+        ORDER BY R.created_at DESC
+    """, (movie_id,))
+    reviews = cur.fetchall()
+    cur.execute("""
+        SELECT rating, review_text
+        FROM REVIEW
+        WHERE movie_id=%s AND user_id=%s
+    """, (movie_id, session['user_id']))
+    my_review = cur.fetchone()
     db.close()
-    return render_template('movie_detail.html', movie=movie, similar=similar)
+    return render_template('movie_detail.html', movie=movie, similar=similar, reviews=reviews, my_review=my_review)
+
+@app.route('/movies/<int:movie_id>/review', methods=['POST'])
+@login_required
+def submit_review(movie_id):
+    rating = request.form.get('rating', type=int)
+    review_text = (request.form.get('review_text') or '').strip()
+    if rating is None or rating < 1 or rating > 5:
+        flash('Please select a rating between 1 and 5.', 'error')
+        return redirect(url_for('movie_detail', movie_id=movie_id))
+
+    db = get_db(); cur = db.cursor()
+    cur.execute("""
+        INSERT INTO REVIEW (user_id, movie_id, rating, review_text)
+        VALUES (%s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+            rating=VALUES(rating),
+            review_text=VALUES(review_text),
+            created_at=CURRENT_TIMESTAMP
+    """, (session['user_id'], movie_id, rating, review_text or None))
+    db.commit(); db.close()
+    flash('Your review has been saved.', 'success')
+    return redirect(url_for('movie_detail', movie_id=movie_id))
 
 @app.route('/movies/<int:movie_id>/delete', methods=['POST'])
 @admin_required
@@ -242,7 +280,7 @@ def recommend():
         seed = cur.fetchone()
         if seed:
             cur.execute("""
-                SELECT DISTINCT M.movie_id, M.title, M.release_year, M.rating, M.poster_url,
+                SELECT DISTINCT M.movie_id, M.title, M.release_year, M.rating, M.poster_url, M.trailer_url,
                        D.name AS director,
                        GROUP_CONCAT(DISTINCT G.genre_name SEPARATOR ', ') AS genres,
                        (
@@ -269,7 +307,7 @@ def recommend():
                 r['similarity_score'] = score
                 cur2 = db.cursor()
                 cur2.execute("""
-                    INSERT INTO RECOMMENDATION (user_id,movie_id,similarity_score)
+                    SELECT M2.movie_id, M2.title, M2.rating, M2.poster_url, M2.trailer_url,
                     VALUES (%s,%s,%s)
                 """, (session['user_id'], r['movie_id'], score))
             db.commit()

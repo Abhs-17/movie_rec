@@ -19,7 +19,8 @@
     <div class="detail-title">{{ movie.title }}</div>
     <div class="detail-meta">
       {% if movie.release_year %}<span class="chip">{{ movie.release_year }}</span>{% endif %}
-      {% if movie.rating %}<span class="chip">⭐ {{ movie.rating }}/10</span>{% endif %}
+      {% if movie.rating %}<span class="chip">IMDb ⭐ {{ movie.rating }}/10</span>{% endif %}
+      {% if movie.user_review_count %}<span class="chip">Users ⭐ {{ movie.user_avg_rating }}/5 ({{ movie.user_review_count }})</span>{% endif %}
     </div>
 
     {% if movie.director %}
@@ -52,6 +53,26 @@
     </div>
     {% endif %}
 
+    <div class="card" style="margin-top:1.5rem;">
+      <div class="section-title" style="font-size:1rem;margin-bottom:.8rem;">YOUR REVIEW</div>
+      <form method="POST" action="{{ url_for('submit_review', movie_id=movie.movie_id) }}">
+        <div class="form-group">
+          <label>Your Rating (1-5) *</label>
+          <select class="form-control" name="rating" required>
+            <option value="">Select rating</option>
+            {% for n in [5,4,3,2,1] %}
+            <option value="{{ n }}" {% if my_review and my_review.rating == n %}selected{% endif %}>{{ n }} Star{{ 's' if n > 1 }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Review</label>
+          <textarea class="form-control" name="review_text" rows="3" placeholder="Share your thoughts...">{{ my_review.review_text if my_review else '' }}</textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Save Review</button>
+      </form>
+    </div>
+
     {% if session.get('role') == 'admin' %}
     <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:.8rem;">
       <form method="POST" action="{{ url_for('delete_movie', movie_id=movie.movie_id) }}"
@@ -63,6 +84,29 @@
   </div>
 </div>
 
+<div style="margin-bottom:2rem;">
+  <div class="section-title">USER REVIEWS</div>
+  {% if reviews %}
+    <div class="review-list">
+      {% for r in reviews %}
+      <div class="review-item card">
+        <div class="review-head">
+          <strong>{{ r.username }}</strong>
+          <span class="score-badge">⭐ {{ r.rating }}/5</span>
+        </div>
+        {% if r.review_text %}<p class="review-text">{{ r.review_text }}</p>{% endif %}
+        <div class="review-time">{{ r.created_at.strftime('%b %d, %Y') }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">
+      <div class="icon">📝</div>
+      <p>No reviews yet. Be the first to review this movie.</p>
+    </div>
+  {% endif %}
+</div>
+
 <!-- Similar Movies -->
 {% if similar %}
 <div>
@@ -70,7 +114,7 @@
   <div class="movie-grid">
     {% for m in similar %}
     <a href="{{ url_for('movie_detail', movie_id=m.movie_id) }}" style="text-decoration:none;">
-      <div class="movie-card">
+      <div class="movie-card" data-trailer-url="{{ m.trailer_url or '' }}" data-movie-title="{{ m.title }}">
         {% if m.poster_url %}
           <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
         {% else %}
@@ -78,7 +122,7 @@
         {% endif %}
         <div class="card-body">
           <div class="card-title">{{ m.title }}</div>
-          {% if m.rating %}<div class="rating">⭐ {{ m.rating }}</div>{% endif %}
+          {% if m.rating %}<div class="rating">IMDb ⭐ {{ m.rating }}</div>{% endif %}
           <div style="margin-top:.3rem;">
             {% for g in m.genres.split(', ') %}<span class="genre-tag">{{ g }}</span>{% endfor %}
           </div>

@@ -69,6 +69,20 @@ CREATE TABLE IF NOT EXISTS MOVIE_PLATFORM (
     FOREIGN KEY (platform_id) REFERENCES STREAMING_PLATFORM(platform_id) ON DELETE CASCADE
 );
 
+-- REVIEW (user-generated)
+CREATE TABLE IF NOT EXISTS REVIEW (
+    review_id    INT AUTO_INCREMENT PRIMARY KEY,
+    user_id      INT NOT NULL,
+    movie_id     INT NOT NULL,
+    rating       TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    review_text  TEXT,
+    created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_review_user_movie (user_id, movie_id),
+    FOREIGN KEY (user_id)  REFERENCES USER(user_id)  ON DELETE CASCADE,
+    FOREIGN KEY (movie_id) REFERENCES MOVIE(movie_id) ON DELETE CASCADE
+);
+CREATE INDEX idx_review_movie ON REVIEW(movie_id);
+
 -- RECOMMENDATION
 CREATE TABLE IF NOT EXISTS RECOMMENDATION (
     rec_id           INT AUTO_INCREMENT PRIMARY KEY,

@@ -38,8 +38,8 @@
     <div class="section-title">TOP RATED MOVIES</div>
     <div class="movie-grid" style="grid-template-columns: repeat(auto-fill,minmax(150px,1fr));">
       {% for m in top_movies %}
-      <a href="{{ url_for('movie_detail', movie_id=loop.index) }}" style="text-decoration:none;">
-        <div class="movie-card">
+      <a href="{{ url_for('movie_detail', movie_id=m.movie_id) }}" style="text-decoration:none;">
+        <div class="movie-card" data-trailer-url="{{ m.trailer_url or '' }}" data-movie-title="{{ m.title }}">
           {% if m.poster_url %}
             <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
           {% else %}
@@ -47,7 +47,7 @@
           {% endif %}
           <div class="card-body">
             <div class="card-title">{{ m.title }}</div>
-            <div class="rating">⭐ {{ m.rating }}</div>
+            <div class="rating">IMDb ⭐ {{ m.rating }}</div>
           </div>
         </div>
       </a>

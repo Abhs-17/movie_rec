@@ -239,6 +239,64 @@ img { max-width: 100%; }
   margin-top: .4rem;
 }
 
+.trailer-hover-preview {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  width: min(360px, 92vw);
+  background: #08080d;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .55);
+  z-index: 1200;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .16s ease, transform .16s ease;
+  pointer-events: none;
+}
+
+.trailer-hover-preview.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.trailer-hover-head {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .5rem .7rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: .78rem;
+}
+
+.trailer-hover-head .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.trailer-hover-head .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trailer-hover-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.trailer-hover-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 /* ── Table ─────────────────────────────────────────────────── */
 .table-wrap { overflow-x: auto; }
 table {
@@ -407,6 +465,33 @@ select.form-control option { background: var(--surface); }
   transition: all .2s;
 }
 .platform-link:hover { border-color: var(--accent); color: var(--accent); }
+
+.review-list {
+  display: grid;
+  gap: .9rem;
+}
+
+.review-item {
+  padding: 1rem 1.1rem;
+}
+
+.review-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .45rem;
+}
+
+.review-text {
+  color: var(--text);
+  margin-bottom: .45rem;
+}
+
+.review-time {
+  color: var(--muted);
+  font-size: .78rem;
+}
 
 /* ── Recommend page ────────────────────────────────────────── */
 .rec-hero {

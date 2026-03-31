@@ -31,7 +31,7 @@
 <div class="movie-grid">
   {% for m in movies %}
   <a href="{{ url_for('movie_detail', movie_id=m.movie_id) }}" style="text-decoration:none;">
-    <div class="movie-card">
+    <div class="movie-card" data-trailer-url="{{ m.trailer_url or '' }}" data-movie-title="{{ m.title }}">
       {% if m.poster_url %}
         <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
       {% else %}
@@ -43,7 +43,7 @@
           {% if m.release_year %}{{ m.release_year }}{% endif %}
           {% if m.director %} · {{ m.director }}{% endif %}
         </div>
-        {% if m.rating %}<div class="rating">⭐ {{ m.rating }}</div>{% endif %}
+        {% if m.rating %}<div class="rating">IMDb ⭐ {{ m.rating }}</div>{% endif %}
         {% if m.genres %}
         <div style="margin-top:.4rem;">
           {% for g in m.genres.split(', ') %}

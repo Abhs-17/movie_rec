@@ -31,7 +31,7 @@
 <div class="movie-grid">
   {% for m in results %}
   <a href="{{ url_for('movie_detail', movie_id=m.movie_id) }}" style="text-decoration:none;">
-    <div class="movie-card">
+    <div class="movie-card" data-trailer-url="{{ m.trailer_url or '' }}" data-movie-title="{{ m.title }}">
       {% if m.poster_url %}
         <img class="poster" src="{{ m.poster_url }}" alt="{{ m.title }}" loading="lazy">
       {% else %}
@@ -40,7 +40,7 @@
       <div class="card-body">
         <div class="card-title">{{ m.title }}</div>
         <div class="card-meta">{{ m.director }}</div>
-        {% if m.rating %}<div class="rating">⭐ {{ m.rating }}</div>{% endif %}
+        {% if m.rating %}<div class="rating">IMDb ⭐ {{ m.rating }}</div>{% endif %}
         <div style="margin-top:.4rem;">
           <span class="score-badge">{{ "%.0f"|format(m.similarity_score*100) }}% match</span>
         </div>
